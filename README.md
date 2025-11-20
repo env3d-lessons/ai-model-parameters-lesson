@@ -188,6 +188,8 @@ How much GPU RAM is being used for this model?
 
 ---
 
+# Q8
+
 For Q8 to Q10, replace your notebook with the following code.
 
 ```python
@@ -206,10 +208,6 @@ image = pipe(
 
 image
 ```
-
----
-
-# Q8
 
 What is the purpose of the random_seed? (Choose all that applies)
 
