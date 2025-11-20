@@ -2,6 +2,7 @@
 
 A series of guided questions to explore how model size, GPU, and quantization.
 
+---
 
 # Q1
 
@@ -21,6 +22,8 @@ What are the available "runtimes" you can choose?
 
   d. L4
 
+---
+
 # Q2
 
 Select the T4 GPU runtime type and connect to it.  Which of the following is true?  Select all that applies:
@@ -32,6 +35,8 @@ Select the T4 GPU runtime type and connect to it.  Which of the following is tru
   c. You get 2 hours of time to use it
 
   d. You get over 100G of disk space
+
+---
 
 # Q3
 
@@ -58,6 +63,8 @@ Select all the TRUE statements:
   c. The model is downloaded from huggingface
 
   d. The model size is around 1.5 Gigabytes
+
+---
 
 # Q4
 
@@ -97,6 +104,8 @@ Run the above cell 3 times.  What was the fastest speed you got out of the above
 
   d. Over 1 minute
 
+---
+
 # Q5
 
 Change the device variable in cell one as follows:
@@ -115,6 +124,7 @@ And rerun cell 1.  Then run cell 2 three times as above.  What is the fastest ti
 
   d. Over 1 minute
 
+---
 
 # Q6
 
@@ -149,6 +159,8 @@ How much GPU RAM is being used for this model?
 
   d. Bigger than 4G
 
+---
+
 # Q7
 
 Enter the following code into cell 2
@@ -176,7 +188,7 @@ How much GPU RAM is being used for this model?
 
 ---
 
-Replace cell 2 with the following where you can experiment with various parameters:
+For Q8 to Q10, replace your notebook with the following code.
 
 ```python
 prompt = "A futuristic city skyline at sunset, digital art"
@@ -195,6 +207,8 @@ image = pipe(
 image
 ```
 
+---
+
 # Q8
 
 What is the purpose of the random_seed? (Choose all that applies)
@@ -206,6 +220,8 @@ What is the purpose of the random_seed? (Choose all that applies)
   c. Controls image size
 
   d. Make image output deterministic
+
+---
 
 # Q9
 
@@ -219,6 +235,8 @@ What is the purpose of the num_inference_step? (Choose all that applies)
 
   d. Make image output deterministic
 
+---
+
 # Q10
 
 What is the purpose of the guidance_scale? (Choose all that applies)
@@ -231,6 +249,7 @@ What is the purpose of the guidance_scale? (Choose all that applies)
 
   d. Make image output deterministic
 
+---
 
 # Q11
 
@@ -321,5 +340,5 @@ How many models are being used in the above code?
   b. 2
 
   c. 3
-  
+
   d. 4
