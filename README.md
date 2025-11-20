@@ -9,7 +9,7 @@ Visit https://colab.research.google.com/ (create a google account if necessary).
 
 Click on the drop down button at the top right hand corner and choose "change runtime type".
 
-![Q1: Colab runtime type dropdown](./q1.png)
+<img src="./q1.png" alt="Q1: Colab runtime type dropdown" width="500">
 
 What are the available "runtimes" you can choose?
 
@@ -120,7 +120,7 @@ And rerun cell 1.  Then run cell 2 three times as above.  What is the fastest ti
 
 Reset your runtime as below and delete all cells (you could also just start a new notebook):
 
-![Q6: Colab runtime reset](./q6.png)
+<img src="./q6.png" alt="Q6: Colab runtime reset" width="500">
 
 Put the following code in cell 1:
 
@@ -230,3 +230,96 @@ What is the purpose of the guidance_scale? (Choose all that applies)
   c. There is no maximum to the guidance_scale
 
   d. Make image output deterministic
+
+
+# Q11
+
+Try the following code in Colab:
+
+```python
+
+from ultralytics import YOLO
+import torch
+from diffusers import AutoPipelineForInpainting
+from PIL import Image, ImageDraw
+import requests
+import io
+from IPython.display import display
+
+# -------------------------------
+# 2️⃣ Load models
+# -------------------------------
+
+# YOLO segmentation model
+yolo_model = YOLO("yolov8n-seg.pt")  # small segmentation model
+
+# Diffusion model for inpainting
+pipe = AutoPipelineForInpainting.from_pretrained(
+    "diffusers/stable-diffusion-xl-1.0-inpainting-0.1",
+    torch_dtype=torch.float16,
+    variant="fp16").to("cuda")
+
+# -------------------------------
+# 3️⃣ Load a static image
+# -------------------------------
+image_path = "http://images.cocodataset.org/val2017/000000039769.jpg"  # replace with your image path
+response = requests.get(image_path)
+image_pil = Image.open(io.BytesIO(response.content)).convert("RGB")
+display(image_pil) # Changed from image_pil.show(title="Original Image")
+
+# -------------------------------
+# 4️⃣ Run YOLO detection / segmentation
+# -------------------------------
+results = yolo_model.predict(image_pil, imgsz=640)  # PIL image is accepted directly
+
+# We'll take the first detected object for simplicity
+# Get bounding box of first detected object
+if len(results[0].boxes) > 0:
+    box = results[0].boxes.xyxy[0].cpu().numpy()  # [x1, y1, x2, y2]
+    x1, y1, x2, y2 = [int(v) for v in box]
+
+    # Create mask (white rectangle over black background)
+    mask_pil = Image.new("L", image_pil.size, 0)
+    draw = ImageDraw.Draw(mask_pil)
+    draw.rectangle([x1, y1, x2, y2], fill=255)
+
+    display(mask_pil)
+else:
+    print("No objects detected. Exiting.")
+    exit()
+
+# -------------------------------
+# 5️⃣ Generate edited image via inpainting
+# -------------------------------
+prompt = "A cute, fluffy, playful cartoon cat, vibrant colors, Pixar style, highly detailed, professional digital art"
+# SDXL specific parameters removed as they are not needed for stable-diffusion-2-inpainting
+negative_prompt = "blurry, ugly, deformed, text, watermark, bad anatomy, poorly drawn, disfigured, poor quality"
+
+edited_image = pipe(
+    prompt=prompt,
+    image=image_pil,
+    mask_image=mask_pil,
+    negative_prompt=negative_prompt
+).images[0]
+display(edited_image) # Changed from edited_image.show(title="Edited Image")
+
+# -------------------------------
+# 6️⃣ Optional: Save results
+# # -------------------------------
+# image_pil.save("original.png")
+# mask_pil.save("mask.png")
+# edited_image.save("edited.png")
+
+print("Pipeline complete: original, mask, and edited images saved.")
+
+```
+
+How many models are being used in the above code?
+
+  a. 1
+
+  b. 2
+
+  c. 3
+  
+  d. 4
